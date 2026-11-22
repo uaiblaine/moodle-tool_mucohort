@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // phpcs:disable moodle.Files.BoilerplateComment.CommentEndedTooSoon
+// phpcs:disable moodle.Strings.ForbiddenStrings.Found
 
 /**
  * Strings for component 'tool_mucohort', language 'cs'.
@@ -32,8 +33,10 @@ $string['access_managemembers_desc'] = 'Může přidávat a odebírat členy v m
 $string['access_permissions'] = 'Oprávnění';
 $string['access_remove'] = 'Odebrat přístup';
 $string['access_update'] = 'Upravit přístup';
+$string['access_usecohort'] = 'Použít globální skupinu';
+$string['access_usecohort_desc'] = 'Může globální skupinu vybrat v jiných modulech MuTMS, například pro přidělení jejích členů do programů. Neumožňuje zobrazit členy.';
 $string['access_viewmembers'] = 'Zobrazit členy';
-$string['access_viewmembers_desc'] = 'Může vidět seznam členů. Bez jakéhokoli oprávnění může uživatel globální skupinu jen najít a použít, například v metodách zápisu.';
+$string['access_viewmembers_desc'] = 'Může vidět seznam členů. Bez jakéhokoli oprávnění může uživatel globální skupinu jen najít ve správě globálních skupin.';
 $string['bulkchanges'] = 'Hromadné změny';
 $string['bulkchanges_action'] = 'Akce';
 $string['bulkchanges_add_curated_desc'] = 'Uživatelé jsou přidáni do globální skupiny. Blokovaní uživatelé, uživatelé mimo globální skupinu kandidátů a uživatelé jiných klientů jsou přeskočeni, platí limit členů.';
@@ -214,8 +217,6 @@ $string['pluginname'] = 'Plugin pro správu globálních skupin';
 $string['privacy:cohort'] = 'Globální skupina {$a}';
 $string['privacy:metadata:core_cohort'] = 'Členové rozšířených globálních skupin jsou uloženi ve standardním členství v globálních skupinách';
 $string['privacy:metadata:core_role'] = 'Role synchronizované z globálních skupin jsou uloženy jako standardní přiřazení rolí';
-$string['privacy:metadata:field:charvalue'] = 'Textová hodnota pole profilu v mezipaměti';
-$string['privacy:metadata:field:intvalue'] = 'Číselná hodnota pole profilu v mezipaměti';
 $string['privacy:metadata:field:iscurator'] = 'Odpovědná osoba globální skupiny';
 $string['privacy:metadata:field:manageexceptions'] = 'Může spravovat vynucené a blokované uživatele';
 $string['privacy:metadata:field:managemembers'] = 'Může spravovat členy';
@@ -223,6 +224,7 @@ $string['privacy:metadata:field:reason'] = 'Důvod výjimky';
 $string['privacy:metadata:field:timecreated'] = 'Čas vytvoření';
 $string['privacy:metadata:field:timemodified'] = 'Čas změny';
 $string['privacy:metadata:field:type'] = 'Vynucený nebo blokovaný';
+$string['privacy:metadata:field:usecohort'] = 'Může použít globální skupinu';
 $string['privacy:metadata:field:usercreated'] = 'Uživatel, který záznam vytvořil';
 $string['privacy:metadata:field:userid'] = 'Uživatel';
 $string['privacy:metadata:field:useridentifier'] = 'Identifikátor uživatele z externí databáze';
@@ -232,9 +234,7 @@ $string['privacy:metadata:table:tool_mucohort_access'] = 'Přístup uživatelů 
 $string['privacy:metadata:table:tool_mucohort_exception'] = 'Vynucení a blokovaní uživatelé';
 $string['privacy:metadata:table:tool_mucohort_extdb'] = 'Zdroje externích databází globálních skupin';
 $string['privacy:metadata:table:tool_mucohort_extdb_user'] = 'Uživatelé vrácení externími databázemi';
-$string['privacy:metadata:table:tool_mucohort_profilefield'] = 'Mezipaměť hodnot polí profilu uživatelů pro pravidla globálních skupin';
 $string['privacy:metadata:table:tool_mucohort_role'] = 'Nastavení synchronizace rolí globálních skupin';
-$string['privacy:profilefields'] = 'Hodnoty polí profilu uživatelů v mezipaměti';
 $string['role_add'] = 'Přidat roli';
 $string['role_assigned'] = 'Členové s rolí';
 $string['role_context'] = 'Kontext';
@@ -327,7 +327,7 @@ $string['rule_userfield_emptyvalue'] = 'prázdné';
 $string['rule_userfield_endswith'] = '{$a->field} končí na {$a->values}';
 $string['rule_userfield_equals'] = '{$a->field} je {$a->values}';
 $string['rule_userfield_field'] = 'Pole';
-$string['rule_userfield_lastdays'] = '{$a->field} za posledních {$a->values}';
+$string['rule_userfield_lastdays'] = '{$a->field} ne starší než {$a->values}';
 $string['rule_userfield_menu'] = '{$a->field}: {$a->values}';
 $string['rule_userfield_menuvalues'] = 'Hodnoty';
 $string['rule_userfield_never'] = '{$a->field}: nikdy';
@@ -410,11 +410,9 @@ $string['rules_synctype_1_desc'] = 'Synchronizace přidává uživatele, kteří
 $string['rules_synctype_2'] = 'Pouze přidávat členy';
 $string['rules_synctype_2_desc'] = 'Synchronizace přidává uživatele, kteří odpovídají pravidlům, kvůli pravidlům nejsou členové nikdy odebráni. Blokovaní uživatelé a uživatelé jiných klientů jsou přesto odebráni.';
 $string['setting_allowsynconlogin'] = 'Povolit okamžitou synchronizaci při každém přihlášení';
-$string['setting_allowsynconlogin_desc'] = 'Umožní globálním skupinám založeným na pravidlech aktualizovat členství uživatele při každém přihlášení. Vypněte, pokud je přihlášení pomalé nebo selhává kvůli pravidlům globálních skupin; lze to také vynutit v config.php pomocí $CFG->forced_plugin_settings[\'tool_mucohort\'][\'allowsynconlogin\'] = 0; První přihlášení a vytvoření účtu nejsou ovlivněny.';
+$string['setting_allowsynconlogin_desc'] = 'Umožní globálním skupinám založeným na pravidlech aktualizovat členství uživatele při každém přihlášení. Vypněte, pokud je přihlášení pomalé nebo selhává kvůli pravidlům globálních skupin; lze to také vynutit v config.php pomocí `$CFG->forced_plugin_settings[\'tool_mucohort\'][\'allowsynconlogin\'] = 0;`. První přihlášení a vytvoření účtu nejsou ovlivněny.';
 $string['setting_enabledtypes'] = 'Povolené typy globálních skupin';
 $string['setting_enabledtypes_desc'] = 'Typy globálních skupin, které lze ve správě globálních skupin vytvořit nebo na které lze převést. Stávající globální skupiny vypnutých typů fungují dál. Toto nastavení platí vždy pro novou správu globálních skupin; abyste zabránili vytváření standardních globálních skupin ve starém rozhraní jádra, zapněte převzetí stránek globálních skupin jádra. Pro řízení podle rolí použijte pravomoci: standardní globální skupiny vyžadují moodle/cohort:manage, rozšířené globální skupiny vyžadují tool/mucohort:manage. Webové služby nejsou omezeny.';
-$string['setting_profilefieldlifetime'] = 'Životnost mezipaměti polí profilu';
-$string['setting_profilefieldlifetime_desc'] = 'Hodnoty vlastních polí profilu použitých v pravidlech globálních skupin jsou ukládány do mezipaměti pro rychlé vyhodnocení. Hodnoty v mezipaměti starší než tato doba jsou obnoveny před příští úplnou synchronizací globálních skupin, 0 znamená před každou synchronizací. Okamžité aktualizace při přihlášení nebo vytvoření účtu vždy používají aktuální hodnoty.';
 $string['setting_syncretention'] = 'Uchovávání historie synchronizace';
 $string['setting_syncretention_desc'] = 'Historie synchronizace starší než tato doba je smazána, poslední synchronizace každé globální skupiny je vždy zachována.';
 $string['setting_takeover'] = 'Nahradit stránky globálních skupin jádra';
@@ -460,7 +458,7 @@ $string['tab_rules_active'] = 'Aktivní pravidla';
 $string['tab_rules_draft'] = 'Rozpracovaná pravidla';
 $string['tab_sync'] = 'Historie synchronizace';
 $string['tab_usage'] = 'Použití';
-$string['task_cleanup'] = 'Smazat starou historii synchronizace globálních skupin a nepoužívaná data v mezipaměti';
+$string['task_cleanup'] = 'Smazat starou historii synchronizace globálních skupin';
 $string['task_role_maintenance'] = 'Synchronizovat role členů globálních skupin';
 $string['task_sync_scheduled'] = 'Zařadit do fronty plánované synchronizace globálních skupin založených na pravidlech';
 $string['type'] = 'Typ';
@@ -476,7 +474,7 @@ $string['type_standard'] = 'Standardní';
 $string['type_standard_desc'] = 'Klasická globální skupina Moodle spravovaná standardními pravomocemi, bez dalších funkcí.';
 $string['usage_audiences'] = 'Vlastní sestavy viditelné členům globální skupiny';
 $string['usage_badges'] = 'Kritéria odznaků';
-$string['usage_candidate'] = 'Globální skupina kandidátů rozšířených globálních skupin';
+$string['usage_candidate'] = 'Rozšířené globální skupiny: Globální skupina kandidátů';
 $string['usage_cohortroles'] = 'Přiřazení rolí globální skupiny';
 $string['usage_enrolcohort'] = 'Metody zápisu synchronizací s globální skupinou';
 $string['usage_enrolself'] = 'Metody zápisu sebe sama omezené na členy globální skupiny';
@@ -484,3 +482,7 @@ $string['usage_hidden'] = 'Pro vás neviditelné: {$a}';
 $string['usage_info'] = 'Místa, kde se tato globální skupina používá. Pluginy, které použití globálních skupin nehlásí, nejsou zahrnuty.';
 $string['usage_none'] = 'Nebylo nalezeno žádné použití této globální skupiny.';
 $string['usage_users'] = 'Uživatelé: {$a}';
+$string['visible_hidden'] = 'Skrytá';
+$string['visible_hidden_desc'] = 'Doporučeno. Globální skupinu mohou použít jen uživatelé, kteří smějí zobrazit globální skupiny v jejím kontextu, pokročilé globální skupiny také uživatelé s oprávněním Použít globální skupinu.';
+$string['visible_visible'] = 'Viditelná';
+$string['visible_visible_desc'] = 'Nedoporučeno. Tuto globální skupinu může použít každý, kdo může kdekoli na webu vybírat globální skupiny, například učitelé v zápisu globální skupiny, bez ohledu na přístupová oprávnění.';

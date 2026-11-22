@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // phpcs:disable moodle.Files.BoilerplateComment.CommentEndedTooSoon
+// phpcs:disable moodle.Strings.ForbiddenStrings.Found
 
 /**
  * Strings for component 'tool_mucohort', language 'de'.
@@ -22,9 +23,6 @@
  * NOTE: This German translation was produced automatically by an AI language
  * model and has not yet been reviewed by a human translator. Corrections are
  * welcome.
- *
- * HINWEIS: Diese deutsche Übersetzung wurde automatisch von einem KI-Sprachmodell
- * erstellt und noch nicht von einem Menschen geprüft. Korrekturen sind willkommen.
  *
  * @package    tool_mucohort
  * @copyright  2026 Petr Skoda
@@ -39,8 +37,10 @@ $string['access_managemembers_desc'] = 'Darf Mitglieder hinzufügen und entferne
 $string['access_permissions'] = 'Rechte';
 $string['access_remove'] = 'Zugriff entziehen';
 $string['access_update'] = 'Zugriff bearbeiten';
+$string['access_usecohort'] = 'Globale Gruppe verwenden';
+$string['access_usecohort_desc'] = 'Darf die globale Gruppe in anderen MuTMS-Plugins auswählen, zum Beispiel um ihre Mitglieder Programmen zuzuweisen. Erlaubt nicht das Anzeigen der Mitglieder.';
 $string['access_viewmembers'] = 'Mitglieder anzeigen';
-$string['access_viewmembers_desc'] = 'Darf die Liste der Mitglieder sehen. Ohne jedes Recht kann die Person die globale Gruppe nur finden und verwenden, zum Beispiel in Einschreibemethoden.';
+$string['access_viewmembers_desc'] = 'Darf die Liste der Mitglieder sehen. Ohne jedes Recht kann die Person die globale Gruppe nur in der Verwaltung globaler Gruppen finden.';
 $string['bulkchanges'] = 'Massenänderungen';
 $string['bulkchanges_action'] = 'Aktion';
 $string['bulkchanges_add_curated_desc'] = 'Nutzer/innen werden der globalen Gruppe hinzugefügt. Blockierte Nutzer/innen, Nutzer/innen außerhalb der globalen Gruppe der Kandidat/innen und Nutzer/innen anderer Mandanten werden übersprungen, die Mitgliederbegrenzung gilt.';
@@ -221,8 +221,6 @@ $string['pluginname'] = 'Verwaltung globaler Gruppen';
 $string['privacy:cohort'] = 'Globale Gruppe {$a}';
 $string['privacy:metadata:core_cohort'] = 'Mitglieder erweiterter globaler Gruppen werden in der Standard-Mitgliedschaft globaler Gruppen gespeichert';
 $string['privacy:metadata:core_role'] = 'Aus globalen Gruppen synchronisierte Rollen werden als Standard-Rollenzuweisungen gespeichert';
-$string['privacy:metadata:field:charvalue'] = 'Zwischengespeicherter Textwert des Profilfelds';
-$string['privacy:metadata:field:intvalue'] = 'Zwischengespeicherter Zahlenwert des Profilfelds';
 $string['privacy:metadata:field:iscurator'] = 'Verantwortliche Person der globalen Gruppe';
 $string['privacy:metadata:field:manageexceptions'] = 'Darf erzwungene und blockierte Nutzer/innen verwalten';
 $string['privacy:metadata:field:managemembers'] = 'Darf Mitglieder verwalten';
@@ -230,6 +228,7 @@ $string['privacy:metadata:field:reason'] = 'Grund der Ausnahme';
 $string['privacy:metadata:field:timecreated'] = 'Erstellt am';
 $string['privacy:metadata:field:timemodified'] = 'Geändert am';
 $string['privacy:metadata:field:type'] = 'Erzwungen oder blockiert';
+$string['privacy:metadata:field:usecohort'] = 'Darf die globale Gruppe verwenden';
 $string['privacy:metadata:field:usercreated'] = 'Nutzer/in, die/der den Eintrag angelegt hat';
 $string['privacy:metadata:field:userid'] = 'Nutzer/in';
 $string['privacy:metadata:field:useridentifier'] = 'Nutzerkennung aus der externen Datenbank';
@@ -239,9 +238,7 @@ $string['privacy:metadata:table:tool_mucohort_access'] = 'Berechtigte Nutzer/inn
 $string['privacy:metadata:table:tool_mucohort_exception'] = 'Erzwungene und blockierte Nutzer/innen';
 $string['privacy:metadata:table:tool_mucohort_extdb'] = 'Externe Datenbankquellen globaler Gruppen';
 $string['privacy:metadata:table:tool_mucohort_extdb_user'] = 'Von externen Datenbanken zurückgegebene Nutzer/innen';
-$string['privacy:metadata:table:tool_mucohort_profilefield'] = 'Cache der Werte von Nutzerprofilfeldern für Regeln globaler Gruppen';
 $string['privacy:metadata:table:tool_mucohort_role'] = 'Einstellungen der Rollensynchronisierung globaler Gruppen';
-$string['privacy:profilefields'] = 'Zwischengespeicherte Werte von Nutzerprofilfeldern';
 $string['role_add'] = 'Rolle hinzufügen';
 $string['role_assigned'] = 'Mitglieder mit Rolle';
 $string['role_context'] = 'Kontext';
@@ -334,7 +331,7 @@ $string['rule_userfield_emptyvalue'] = 'leer';
 $string['rule_userfield_endswith'] = '{$a->field} endet mit {$a->values}';
 $string['rule_userfield_equals'] = '{$a->field} ist {$a->values}';
 $string['rule_userfield_field'] = 'Feld';
-$string['rule_userfield_lastdays'] = '{$a->field} innerhalb der letzten {$a->values}';
+$string['rule_userfield_lastdays'] = '{$a->field} nicht älter als {$a->values}';
 $string['rule_userfield_menu'] = '{$a->field}: {$a->values}';
 $string['rule_userfield_menuvalues'] = 'Werte';
 $string['rule_userfield_never'] = '{$a->field}: nie';
@@ -417,11 +414,9 @@ $string['rules_synctype_1_desc'] = 'Die Synchronisierung fügt Nutzer/innen hinz
 $string['rules_synctype_2'] = 'Nur hinzufügen';
 $string['rules_synctype_2_desc'] = 'Die Synchronisierung fügt Nutzer/innen hinzu, die den Regeln entsprechen, Mitglieder werden aufgrund von Regeln nie entfernt. Blockierte Nutzer/innen und Nutzer/innen anderer Mandanten werden trotzdem entfernt.';
 $string['setting_allowsynconlogin'] = 'Sofortige Synchronisierung bei jeder Anmeldung erlauben';
-$string['setting_allowsynconlogin_desc'] = 'Erlaubt regelbasierten globalen Gruppen, die Mitgliedschaft der Person bei jeder Anmeldung zu aktualisieren. Deaktivieren Sie dies, wenn die Anmeldung wegen Regeln globaler Gruppen langsam ist oder fehlschlägt; es kann auch in config.php mit $CFG->forced_plugin_settings[\'tool_mucohort\'][\'allowsynconlogin\'] = 0; erzwungen werden. Erste Anmeldung und Kontoerstellung sind nicht betroffen.';
+$string['setting_allowsynconlogin_desc'] = 'Erlaubt regelbasierten globalen Gruppen, die Mitgliedschaft der Person bei jeder Anmeldung zu aktualisieren. Deaktivieren Sie dies, wenn die Anmeldung wegen Regeln globaler Gruppen langsam ist oder fehlschlägt; es kann auch in config.php mit `$CFG->forced_plugin_settings[\'tool_mucohort\'][\'allowsynconlogin\'] = 0;` erzwungen werden. Erste Anmeldung und Kontoerstellung sind nicht betroffen.';
 $string['setting_enabledtypes'] = 'Aktivierte Typen globaler Gruppen';
 $string['setting_enabledtypes_desc'] = 'Typen globaler Gruppen, die in der Verwaltung globaler Gruppen angelegt oder in die umgewandelt werden können. Bestehende globale Gruppen deaktivierter Typen funktionieren weiter. Diese Einstellung gilt immer für die neue Verwaltung globaler Gruppen. Aktivieren Sie das Ersetzen der Core-Seiten für globale Gruppen, damit niemand mehr globale Gruppen vom Typ „Standard“ in der alten Core-Oberfläche anlegen kann. Verwenden Sie Fähigkeiten zur Steuerung pro Rolle: globale Gruppen vom Typ „Standard“ erfordern moodle/cohort:manage, erweiterte globale Gruppen erfordern tool/mucohort:manage. Webservices sind nicht eingeschränkt.';
-$string['setting_profilefieldlifetime'] = 'Lebensdauer des Profilfeld-Caches';
-$string['setting_profilefieldlifetime_desc'] = 'Werte nutzerdefinierter Profilfelder, die in Regeln globaler Gruppen verwendet werden, werden für eine schnelle Auswertung zwischengespeichert. Zwischengespeicherte Werte, die älter als dieser Wert sind, werden vor der nächsten vollständigen Synchronisierung globaler Gruppen aktualisiert, 0 bedeutet vor jeder Synchronisierung. Sofortige Aktualisierungen bei der Anmeldung oder Kontoerstellung verwenden immer aktuelle Werte.';
 $string['setting_syncretention'] = 'Aufbewahrung des Synchronisierungsverlaufs';
 $string['setting_syncretention_desc'] = 'Ein Synchronisierungsverlauf, der älter als dieser Wert ist, wird gelöscht, die letzte Synchronisierung jeder globalen Gruppe bleibt immer erhalten.';
 $string['setting_takeover'] = 'Core-Seiten für globale Gruppen ersetzen';
@@ -467,7 +462,7 @@ $string['tab_rules_active'] = 'Aktive Regeln';
 $string['tab_rules_draft'] = 'Regelentwurf';
 $string['tab_sync'] = 'Synchronisierungsverlauf';
 $string['tab_usage'] = 'Verwendung';
-$string['task_cleanup'] = 'Alten Synchronisierungsverlauf globaler Gruppen und nicht verwendete zwischengespeicherte Daten löschen';
+$string['task_cleanup'] = 'Alten Synchronisierungsverlauf globaler Gruppen löschen';
 $string['task_role_maintenance'] = 'Rollen der Mitglieder globaler Gruppen synchronisieren';
 $string['task_sync_scheduled'] = 'Geplante Synchronisierungen regelbasierter globaler Gruppen in die Warteschlange stellen';
 $string['type'] = 'Typ';
@@ -483,7 +478,7 @@ $string['type_standard'] = 'Standard';
 $string['type_standard_desc'] = 'Klassische globale Gruppe von Moodle, verwaltet mit Standard-Fähigkeiten, ohne zusätzliche Funktionen.';
 $string['usage_audiences'] = 'Zielgruppen nutzerdefinierter Berichte';
 $string['usage_badges'] = 'Badge-Kriterien';
-$string['usage_candidate'] = 'Globale Gruppe der Kandidat/innen erweiterter globaler Gruppen';
+$string['usage_candidate'] = 'Erweiterte globale Gruppen: Globale Gruppe der Kandidat/innen';
 $string['usage_cohortroles'] = 'Rollen für globale Gruppen';
 $string['usage_enrolcohort'] = 'Einschreibemethoden „Globale Gruppe“';
 $string['usage_enrolself'] = 'Selbsteinschreibungen, die auf Mitglieder globaler Gruppen beschränkt sind';
@@ -491,3 +486,7 @@ $string['usage_hidden'] = 'Für Sie nicht sichtbar: {$a}';
 $string['usage_info'] = 'Orte, an denen diese globale Gruppe verwendet wird. Plugins, die die Verwendung globaler Gruppen nicht melden, sind nicht berücksichtigt.';
 $string['usage_none'] = 'Es wurde keine Verwendung dieser globalen Gruppe gefunden.';
 $string['usage_users'] = 'Nutzer/innen: {$a}';
+$string['visible_hidden'] = 'Verborgen';
+$string['visible_hidden_desc'] = 'Empfohlen. Die globale Gruppe kann nur von Personen verwendet werden, die globale Gruppen in ihrem Kontext sehen dürfen, erweiterte globale Gruppen auch von Personen mit dem Recht Globale Gruppe verwenden.';
+$string['visible_visible'] = 'Sichtbar';
+$string['visible_visible_desc'] = 'Nicht empfohlen. Alle, die irgendwo auf der Website globale Gruppen auswählen können, dürfen diese globale Gruppe verwenden, zum Beispiel Trainer/innen in der Einschreibung globaler Gruppen, unabhängig von den Zugriffsrechten.';

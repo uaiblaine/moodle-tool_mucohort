@@ -16,40 +16,38 @@
 
 // phpcs:disable moodle.Files.BoilerplateComment.CommentEndedTooSoon
 
-namespace tool_mucohort\muform\autocompletemany;
+namespace tool_mucohort\muform\cohortpicker;
 
-use tool_mucohort\local\type\advanced;
+use core\context;
 use tool_mucohort\local\type\base;
+use tool_mulib\local\cohort_util;
 use tool_mulib\local\sql;
-use tool_mulib\muform\util\autocomplete\user_trait;
 
 /**
- * Users for new exceptions of an advanced cohort.
+ * Cohorts to compare with - only cohorts with members visible to the current user.
  *
  * @package     tool_mucohort
  * @copyright   2026 Petr Skoda
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class exception_add_userids extends \tool_mulib\muform\autocompletemany\base {
-    use user_trait;
-
-    /** @var advanced */
-    private advanced $cohort;
+final class compare_cohortids extends \tool_mulib\muform\cohortpicker\base {
+    /** @var base target cohort */
+    private base $cohort;
 
     /**
      * Constructor.
      *
-     * @param int $cohortid
+     * @param int $cohortid target cohort
      */
     public function __construct(
-        /** @var int cohort id */
+        /** @var int target cohort id */
         private readonly int $cohortid
     ) {
         $cohort = base::fetch($cohortid);
-        if (!($cohort instanceof advanced) || !$cohort->can_manage_exceptions()) {
+        if (!$cohort->can_view_members()) {
             throw new \core\exception\required_capability_exception(
                 $cohort->get_context(),
-                'tool/mucohort:manageexceptions',
+                'tool/mucohort:viewmembers',
                 'nopermissions',
                 ''
             );
@@ -63,30 +61,23 @@ final class exception_add_userids extends \tool_mulib\muform\autocompletemany\ba
     }
 
     #[\Override]
-    public function search(string $query, int $maxitems, array $exclude): ?array {
-        return $this->search_users($this->cohort->get_context(), $query, $maxitems, $exclude, $this->get_where());
+    protected function get_context(): context {
+        return $this->cohort->get_context();
     }
-
-    #[\Override]
-    public function labels(array $values): array {
-        return $this->user_labels($this->cohort->get_context(), $values, $this->get_where());
-    }
-
-    #[\Override]
-    public function validate(array $values): array {
-        return $this->validate_users($values);
-    }
-
 
     /**
-     * Users with exceptions are not candidates.
+     * The target cohort cannot be compared with itself.
      *
-     * @return sql
+     * @return int[]
      */
-    private function get_where(): sql {
-        return new sql(
-            "NOT EXISTS (SELECT 'x' FROM {tool_mucohort_exception} e WHERE e.userid = u.id AND e.mucohortid = :emucohortid)",
-            ['emucohortid' => $this->cohort->get_mucohort()->id]
-        );
+    #[\Override]
+    protected function get_excluded_cohortids(): array {
+        return [$this->cohortid];
+    }
+
+    #[\Override]
+    protected function get_restriction_sql(): ?sql {
+        global $USER;
+        return cohort_util::get_view_members_sql('ch', (int)$USER->id);
     }
 }

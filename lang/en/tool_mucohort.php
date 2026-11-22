@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // phpcs:disable moodle.Files.BoilerplateComment.CommentEndedTooSoon
+// phpcs:disable moodle.Strings.ForbiddenStrings.Found
 
 /**
  * Cohort management plugin language strings.
@@ -32,8 +33,10 @@ $string['access_managemembers_desc'] = 'May add and remove members within the li
 $string['access_permissions'] = 'Permissions';
 $string['access_remove'] = 'Revoke access';
 $string['access_update'] = 'Update access';
+$string['access_usecohort'] = 'Use cohort';
+$string['access_usecohort_desc'] = 'May select the cohort in other MuTMS plugins, for example to allocate its members to programs. Does not allow viewing of members.';
 $string['access_viewmembers'] = 'View members';
-$string['access_viewmembers_desc'] = 'May see the list of members. Without any permission the user may only find and use the cohort, for example in enrolment methods.';
+$string['access_viewmembers_desc'] = 'May see the list of members. Without any permission the user may only find the cohort in cohort management.';
 $string['bulkchanges'] = 'Bulk changes';
 $string['bulkchanges_action'] = 'Action';
 $string['bulkchanges_add_curated_desc'] = 'Users are added to the cohort. Blocked users, users outside of the candidate cohort and users of other tenants are skipped, the member limit applies.';
@@ -214,8 +217,6 @@ $string['pluginname'] = 'Cohort management plugin';
 $string['privacy:cohort'] = 'Cohort {$a}';
 $string['privacy:metadata:core_cohort'] = 'Members of advanced cohorts are stored in standard cohort membership';
 $string['privacy:metadata:core_role'] = 'Roles synchronised from cohorts are stored as standard role assignments';
-$string['privacy:metadata:field:charvalue'] = 'Cached text value of the profile field';
-$string['privacy:metadata:field:intvalue'] = 'Cached number value of the profile field';
 $string['privacy:metadata:field:iscurator'] = 'Curator of the cohort';
 $string['privacy:metadata:field:manageexceptions'] = 'May manage forced and blocked users';
 $string['privacy:metadata:field:managemembers'] = 'May manage members';
@@ -223,6 +224,7 @@ $string['privacy:metadata:field:reason'] = 'Reason of the exception';
 $string['privacy:metadata:field:timecreated'] = 'Time created';
 $string['privacy:metadata:field:timemodified'] = 'Time modified';
 $string['privacy:metadata:field:type'] = 'Forced or blocked';
+$string['privacy:metadata:field:usecohort'] = 'May use the cohort';
 $string['privacy:metadata:field:usercreated'] = 'User who created the record';
 $string['privacy:metadata:field:userid'] = 'User';
 $string['privacy:metadata:field:useridentifier'] = 'User identifier from external database';
@@ -232,9 +234,7 @@ $string['privacy:metadata:table:tool_mucohort_access'] = 'Per-cohort access of u
 $string['privacy:metadata:table:tool_mucohort_exception'] = 'Forced and blocked users';
 $string['privacy:metadata:table:tool_mucohort_extdb'] = 'External database sources of cohorts';
 $string['privacy:metadata:table:tool_mucohort_extdb_user'] = 'Users returned by external databases';
-$string['privacy:metadata:table:tool_mucohort_profilefield'] = 'Cache of user profile field values for cohort rules';
 $string['privacy:metadata:table:tool_mucohort_role'] = 'Role synchronisation settings of cohorts';
-$string['privacy:profilefields'] = 'Cached user profile field values';
 $string['role_add'] = 'Add role';
 $string['role_assigned'] = 'Members with role';
 $string['role_context'] = 'Context';
@@ -410,11 +410,9 @@ $string['rules_synctype_1_desc'] = 'Sync adds users who match the rules and remo
 $string['rules_synctype_2'] = 'Add members only';
 $string['rules_synctype_2_desc'] = 'Sync adds users who match the rules, members are never removed because of rules. Blocked users and users of other tenants are still removed.';
 $string['setting_allowsynconlogin'] = 'Allow instant sync on every login';
-$string['setting_allowsynconlogin_desc'] = 'Allow rule-based cohorts to update membership of the user on every login. Disable this if login is slow or failing because of cohort rules; it can be also forced in config.php with $CFG->forced_plugin_settings[\'tool_mucohort\'][\'allowsynconlogin\'] = 0; First login and account creation are not affected.';
+$string['setting_allowsynconlogin_desc'] = 'Allow rule-based cohorts to update membership of the user on every login. Disable this if login is slow or failing because of cohort rules; it can be also forced in config.php with `$CFG->forced_plugin_settings[\'tool_mucohort\'][\'allowsynconlogin\'] = 0;`. First login and account creation are not affected.';
 $string['setting_enabledtypes'] = 'Enabled cohort types';
 $string['setting_enabledtypes_desc'] = 'Cohort types that can be created or converted to in the cohort management. Existing cohorts of disabled types keep working. This setting always applies to the new cohort management, enable the takeover of core cohort pages to stop people from creating standard cohorts in the old core interface. Use capabilities for per-role control: standard cohorts need moodle/cohort:manage, advanced cohorts need tool/mucohort:manage. Web services are not restricted.';
-$string['setting_profilefieldlifetime'] = 'Profile field cache lifetime';
-$string['setting_profilefieldlifetime_desc'] = 'Values of custom profile fields used in cohort rules are cached for fast evaluation. Cached values older than this are refreshed before the next full cohort sync, 0 means before every sync. Instant updates on login or account creation always use current values.';
 $string['setting_syncretention'] = 'Sync history retention';
 $string['setting_syncretention_desc'] = 'Sync history older than this is deleted, the latest sync of each cohort is always kept.';
 $string['setting_takeover'] = 'Replace core cohort pages';
@@ -460,7 +458,7 @@ $string['tab_rules_active'] = 'Active rules';
 $string['tab_rules_draft'] = 'Draft rules';
 $string['tab_sync'] = 'Sync history';
 $string['tab_usage'] = 'Usage';
-$string['task_cleanup'] = 'Delete old cohort sync history and unused cached data';
+$string['task_cleanup'] = 'Delete old cohort sync history';
 $string['task_role_maintenance'] = 'Synchronise roles of cohort members';
 $string['task_sync_scheduled'] = 'Queue scheduled syncs of rule-based cohorts';
 $string['type'] = 'Type';
@@ -476,7 +474,7 @@ $string['type_standard'] = 'Standard';
 $string['type_standard_desc'] = 'Classic Moodle cohort managed with standard capabilities, without any extra features.';
 $string['usage_audiences'] = 'Custom report audiences';
 $string['usage_badges'] = 'Badge criteria';
-$string['usage_candidate'] = 'Candidate cohort of advanced cohorts';
+$string['usage_candidate'] = 'Advanced cohorts: Candidate cohort';
 $string['usage_cohortroles'] = 'Cohort role assignments';
 $string['usage_enrolcohort'] = 'Cohort sync enrolment methods';
 $string['usage_enrolself'] = 'Self enrolment methods restricted to cohort members';
@@ -484,3 +482,7 @@ $string['usage_hidden'] = 'Not visible to you: {$a}';
 $string['usage_info'] = 'Places where this cohort is used. Plugins that do not report the usage of cohorts are not included.';
 $string['usage_none'] = 'No usage of this cohort was found.';
 $string['usage_users'] = 'Users: {$a}';
+$string['visible_hidden'] = 'Hidden';
+$string['visible_hidden_desc'] = 'Recommended. The cohort may be used only by users who are allowed to view cohorts in its context, advanced cohorts also by users with the Use cohort permission.';
+$string['visible_visible'] = 'Visible';
+$string['visible_visible_desc'] = 'Not recommended. Everybody who may select cohorts anywhere on the site may use this cohort, for example teachers in cohort enrolment, whatever the access permissions say.';

@@ -16,12 +16,12 @@
 
 // phpcs:disable moodle.Files.BoilerplateComment.CommentEndedTooSoon
 
-namespace tool_mucohort\local\form;
+namespace tool_mucohort\local\wizard\rule_add;
 
 use tool_mulib\muform\element\buttons;
 use tool_mulib\muform\element\cancel;
 use tool_mulib\muform\element\radiocards;
-use tool_mulib\muform\element\submit;
+use tool_mulib\muform\element\wizardcontinue;
 use tool_mulib\muform\form;
 
 /**
@@ -31,17 +31,16 @@ use tool_mulib\muform\form;
  * @copyright   2026 Petr Skoda
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class rule_type_select extends form {
+final class type extends form {
     #[\Override]
     protected function definition(): void {
         $extra = $this->get_extra_data();
 
         $type = new radiocards('type', get_string('rule_type', 'tool_mucohort'), $extra['types'], $extra['descriptions']);
-        $type->set_required(true);
         $this->add($type);
 
         $this->add(new buttons('buttons'));
-        $this->add(new submit('submit', get_string('continue')), 'buttons');
+        $this->add(new wizardcontinue(), 'buttons');
         $this->add(new cancel(), 'buttons');
     }
 }

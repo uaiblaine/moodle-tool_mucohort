@@ -16,11 +16,10 @@
 
 // phpcs:disable moodle.Files.BoilerplateComment.CommentEndedTooSoon
 
-namespace tool_mucohort\muform\autocompletemany;
+namespace tool_mucohort\muform\userpicker;
 
 use tool_mucohort\local\type\base;
 use tool_mulib\local\sql;
-use tool_mulib\muform\util\autocomplete\user_trait;
 
 /**
  * New members of a standard cohort.
@@ -29,9 +28,7 @@ use tool_mulib\muform\util\autocomplete\user_trait;
  * @copyright   2026 Petr Skoda
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class standard_member_add_userids extends \tool_mulib\muform\autocompletemany\base {
-    use user_trait;
-
+final class standard_member_add_userids extends \tool_mulib\muform\userpicker\base {
     /** @var \core\context cohort context */
     private \core\context $context;
 
@@ -57,27 +54,17 @@ final class standard_member_add_userids extends \tool_mulib\muform\autocompletem
     }
 
     #[\Override]
-    public function search(string $query, int $maxitems, array $exclude): ?array {
-        return $this->search_users($this->context, $query, $maxitems, $exclude, $this->get_where());
+    protected function get_context(): \core\context {
+        return $this->context;
     }
-
-    #[\Override]
-    public function labels(array $values): array {
-        return $this->user_labels($this->context, $values, $this->get_where());
-    }
-
-    #[\Override]
-    public function validate(array $values): array {
-        return $this->validate_users($values);
-    }
-
 
     /**
      * Existing members are not candidates.
      *
-     * @return sql
+     * @return sql|null
      */
-    private function get_where(): sql {
+    #[\Override]
+    protected function get_candidates_sql(): ?sql {
         return new sql(
             "NOT EXISTS (SELECT 'x' FROM {cohort_members} cm WHERE cm.userid = u.id AND cm.cohortid = :mcohortid)",
             ['mcohortid' => $this->cohortid]
