@@ -270,6 +270,20 @@ abstract class base {
     }
 
     /**
+     * Can the current user use the cohort in MuTMS plugins, for example select it as a source of allocations?
+     *
+     * Visible cohorts may be used by everybody who may select cohorts, the same as in standard Moodle.
+     *
+     * @return bool
+     */
+    public function can_use(): bool {
+        if ($this->cohort->visible) {
+            return true;
+        }
+        return has_capability('moodle/cohort:view', $this->get_context());
+    }
+
+    /**
      * Can the current user update, move or delete the cohort?
      *
      * @return bool
@@ -507,6 +521,7 @@ abstract class base {
         $DB->delete_records('tool_mucohort_extdb', ['mucohortid' => $mucohortid]);
         $DB->delete_records('tool_mucohort_sync', ['mucohortid' => $mucohortid]);
         $DB->delete_records('tool_mucohort_rules', ['mucohortid' => $mucohortid]);
+        \tool_mucohort\local\profilefield_util::update_references($mucohortid);
         $DB->delete_records('tool_mucohort_curated', ['mucohortid' => $mucohortid]);
         $DB->delete_records('tool_mucohort_access', ['mucohortid' => $mucohortid]);
         $DB->delete_records('tool_mucohort_exception', ['mucohortid' => $mucohortid]);

@@ -16,23 +16,20 @@
 
 // phpcs:disable moodle.Files.BoilerplateComment.CommentEndedTooSoon
 
-namespace tool_mucohort\muform\autocomplete;
+namespace tool_mucohort\muform\userpicker;
 
 use tool_mucohort\local\type\advanced;
 use tool_mucohort\local\type\base;
 use tool_mulib\local\sql;
-use tool_mulib\muform\util\autocomplete\user_trait;
 
 /**
- * New access record user of an advanced cohort.
+ * Users for new exceptions of an advanced cohort.
  *
  * @package     tool_mucohort
  * @copyright   2026 Petr Skoda
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class access_add_userid extends \tool_mulib\muform\autocomplete\base {
-    use user_trait;
-
+final class exception_add_userids extends \tool_mulib\muform\userpicker\base {
     /** @var advanced */
     private advanced $cohort;
 
@@ -46,10 +43,10 @@ final class access_add_userid extends \tool_mulib\muform\autocomplete\base {
         private readonly int $cohortid
     ) {
         $cohort = base::fetch($cohortid);
-        if (!($cohort instanceof advanced) || !$cohort->can_manage_access()) {
+        if (!($cohort instanceof advanced) || !$cohort->can_manage_exceptions()) {
             throw new \core\exception\required_capability_exception(
                 $cohort->get_context(),
-                'tool/mucohort:manageaccess',
+                'tool/mucohort:manageexceptions',
                 'nopermissions',
                 ''
             );
@@ -63,24 +60,20 @@ final class access_add_userid extends \tool_mulib\muform\autocomplete\base {
     }
 
     #[\Override]
-    public function search(string $query, int $maxitems): ?array {
-        return $this->search_users($this->cohort->get_context(), $query, $maxitems, [], $this->get_where());
-    }
-
-    #[\Override]
-    public function label(string $value): ?string {
-        return $this->user_labels($this->cohort->get_context(), [$value], $this->get_where())[$value] ?? null;
+    protected function get_context(): \core\context {
+        return $this->cohort->get_context();
     }
 
     /**
-     * Users with access record are not candidates.
+     * Users with exceptions are not candidates.
      *
-     * @return sql
+     * @return sql|null
      */
-    private function get_where(): sql {
+    #[\Override]
+    protected function get_candidates_sql(): ?sql {
         return new sql(
-            "NOT EXISTS (SELECT 'x' FROM {tool_mucohort_access} a WHERE a.userid = u.id AND a.mucohortid = :amucohortid)",
-            ['amucohortid' => $this->cohort->get_mucohort()->id]
+            "NOT EXISTS (SELECT 'x' FROM {tool_mucohort_exception} e WHERE e.userid = u.id AND e.mucohortid = :emucohortid)",
+            ['emucohortid' => $this->cohort->get_mucohort()->id]
         );
     }
 }

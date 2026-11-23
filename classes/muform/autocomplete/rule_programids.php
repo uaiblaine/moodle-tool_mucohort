@@ -16,22 +16,25 @@
 
 // phpcs:disable moodle.Files.BoilerplateComment.CommentEndedTooSoon
 
-namespace tool_mucohort\muform\autocompletemany;
+namespace tool_mucohort\muform\autocomplete;
 
-use tool_mulib\muform\util\autocomplete\cohort_trait;
+use tool_muprog\muform\util\autocomplete\program_trait;
 
 /**
- * Cohorts of cohort membership rules - any cohort the user may see.
+ * Programs of program rules - any program the user may view.
  *
- * Cohorts already used by the rule stay valid even if the current user cannot see them,
+ * Programs already used by the rule stay valid even if the current user cannot see them,
  * because rules may be edited by several people.
  *
  * @package     tool_mucohort
  * @copyright   2026 Petr Skoda
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class rule_cohortids extends \tool_mulib\muform\autocompletemany\base {
-    use cohort_trait;
+final class rule_programids extends \tool_mulib\muform\autocomplete\base {
+    use program_trait;
+
+    /** @var string capability required in program context */
+    private const string CAPABILITY = 'tool/muprog:view';
 
     /** @var \core\context context of the rule-based cohort */
     private \core\context $context;
@@ -40,15 +43,12 @@ final class rule_cohortids extends \tool_mulib\muform\autocompletemany\base {
      * Constructor.
      *
      * @param int $contextid context of the rule-based cohort
-     * @param int $cohortid rule-based cohort id, 0 when cohort is not saved yet
-     * @param int[] $currentids cohort ids used by the rule
+     * @param int[] $currentids program ids used by the rule
      */
     public function __construct(
         /** @var int context id */
         private readonly int $contextid,
-        /** @var int rule-based cohort id */
-        private readonly int $cohortid,
-        /** @var int[] current cohort ids */
+        /** @var int[] current program ids */
         private readonly array $currentids
     ) {
         $this->context = \core\context::instance_by_id($contextid);
@@ -57,20 +57,37 @@ final class rule_cohortids extends \tool_mulib\muform\autocompletemany\base {
 
     #[\Override]
     public function get_args(): array {
-        return [$this->contextid, $this->cohortid, $this->currentids];
+        return [$this->contextid, $this->currentids];
     }
 
     #[\Override]
     public function search(string $query, int $maxitems, array $exclude): ?array {
-        if ($this->cohortid) {
-            $exclude[] = (string)$this->cohortid;
-        }
-        return $this->search_cohorts($this->context, $query, $maxitems, $exclude);
+        $where = self::get_program_tenant_where($this->context, false);
+        return $this->search_programs(self::CAPABILITY, $query, $maxitems, $exclude, $where);
     }
 
     #[\Override]
     public function labels(array $values): array {
-        $values = array_filter($values, fn($id) => $id !== (string)$this->cohortid);
-        return $this->cohort_labels($this->context, $values, array_map('intval', $this->currentids));
+        $where = self::get_program_tenant_where($this->context, false);
+        return $this->current_labels($values) + $this->program_labels(self::CAPABILITY, $values, $where);
+    }
+
+    /**
+     * Labels of programs already used by the rule, whatever changed since.
+     *
+     * @param string[] $ids
+     * @return array [id => label html]
+     */
+    private function current_labels(array $ids): array {
+        global $DB;
+        $ids = array_intersect(array_map('intval', $ids), $this->currentids);
+        if (!$ids) {
+            return [];
+        }
+        $result = [];
+        foreach ($DB->get_records_list('tool_muprog_program', 'id', $ids, 'id ASC', 'id, fullname, contextid') as $program) {
+            $result[(string)$program->id] = self::format_program_label($program);
+        }
+        return $result;
     }
 }
